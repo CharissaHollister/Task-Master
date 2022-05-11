@@ -72,15 +72,19 @@ $(".card .list-group").sortable({
   tolerance: "pointer",
   helper: "clone",
   activate: function(event, ui) {
+    $(this).addClass("dropover", "bottom-trash", "bottom-trash-drag");
     console.log(ui);
   },
   deactivate: function(event, ui) {
+    $(this).removeClass("dropover", "bottom-trash", "bottom-trash-drag")
     console.log(ui);
   },
   over: function(event) {
+    $(event.target).addClass("dropover-active", "bottom-trash", "bottom-trash-active")
     console.log(event);
   },
   out: function(event) {
+    $(event.target).removeClass("dropover-active", "bottom-trash")
     console.log(event);
   },
   update: function() {
@@ -118,7 +122,7 @@ $(".card .list-group").sortable({
 });
 
 // trash icon can be dropped onto
-$("#trash").droppable({
+$("#trash").droppable(
   accept: ".card .list-group-item",
   tolerance: "touch",
   drop: function(event, ui) {
@@ -132,8 +136,6 @@ $("#trash").droppable({
   out: function(event, ui) {
     console.log(ui);
   }
-});
-
 
 // modal was triggered
 $("#modalDueDate").datepicker({
@@ -265,5 +267,10 @@ $("#remove-tasks").on("click", function() {
   saveTasks();
 });
 
+setInterval(function () {
+  $(".card .list-group-item").each(function(index, el) {
+    auditTask(el);
+  });
+}, (1000 * 60) * 30);
 // load tasks for the first time
 loadTasks();
